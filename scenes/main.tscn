@@ -1,7 +1,38 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbe8ms31o0lwn"]
+[gd_scene load_steps=6 format=3 uid="uid://cbe8ms31o0lwn"]
 
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_bn5mk"]
 [ext_resource type="PackedScene" uid="uid://2cxn0mqy7f2k" path="res://scenes/player/player.tscn" id="1_frxex"]
+[ext_resource type="PackedScene" uid="uid://bpm2dsf55o2jy" path="res://scenes/coin/coin.tscn" id="2_hixxs"]
+[ext_resource type="Texture2D" uid="uid://ciam8y6mco5w0" path="res://assets/grass.png" id="2_s5wuo"]
+[ext_resource type="PackedScene" uid="uid://ddrh1ug3vx7bi" path="res://scenes/HUD.tscn" id="5_l7sw3"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_bn5mk")
+coin_scene = ExtResource("2_hixxs")
 
-[node name="Area2D" parent="." instance=ExtResource("1_frxex")]
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_s5wuo")
+stretch_mode = 1
+
+[node name="Player" parent="." instance=ExtResource("1_frxex")]
+
+[node name="GameTimer" type="Timer" parent="."]
+
+[node name="Top" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CoinsLayer" type="Node" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource("5_l7sw3")]
+
+[connection signal="hurt" from="Player" to="." method="_on_player_hurt"]
+[connection signal="pickup" from="Player" to="." method="_on_player_pickup"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
+[connection signal="hide_player" from="HUD" to="." method="_on_hud_hide_player"]
+[connection signal="start_game" from="HUD" to="." method="_on_hud_start_game"]
